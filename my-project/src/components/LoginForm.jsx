@@ -17,6 +17,7 @@ const LoginForm = () => {
     e.preventDefault();
     try {
         dispatch(signInStart());
+        console.log(error);
         const res = await fetch("/api/auth/signin",{
             method:'POST',
             headers: {
@@ -25,11 +26,11 @@ const LoginForm = () => {
             body: JSON.stringify(formData)
         });
         const data = await res.json();
-        if(!data.success){
+        if(data.success===false){
           dispatch(signInFailure(data));
           return;
         }
-        console.log(data);
+        console.log("This is the data after signing in",data);
         dispatch(signInSuccess(data))
         navigate('/');
     } catch (error) {
