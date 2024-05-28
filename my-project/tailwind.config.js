@@ -12,7 +12,8 @@ export default {
         Volkhov: ['Volkhov', 'cursive']
       },
       colors: {
-        gold: '#cda016', 
+        gold: '#cda016',
+        brown: '#222f3e'
       },
     },
   },

@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import Header from '../components/Header'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 const SignUp = () => {
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({});
     const [error,setError] = useState(false);
     const [loading,setLoading] = useState(false);
@@ -23,13 +24,14 @@ const SignUp = () => {
                 body: JSON.stringify(formData)
             });
             const data = await res.json();
-            console.log(data);
+            console.log(data,"This is the data");
             setLoading(false);
+            navigate("/signin");
         } catch (error) {
+            console.log(error,"This is erroor");
             setLoading(false);
             setError(true);
-        }
-        
+        }        
     }
   return (
     <div>

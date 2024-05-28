@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 const Header = () => {
   return (
-    <div className='border-2 bg-slate-200'>
+    <div className=''>
       <div className='flex justify-between items-center max-w-6xl mx-auto p-3'>
       <h1 className='font-bold'>My Diary App</h1>
       <ul className='flex gap-4'>
