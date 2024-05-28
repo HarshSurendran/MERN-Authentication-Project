@@ -5,7 +5,7 @@ import About from './Pages/About';
 import Profile from './Pages/Profile';
 import LoginPage from './Pages/LoginPage';
 import SignUp from './Pages/SignUp';
-
+import PrivateRoute from './components/PrivateRoute';
 
 
 const App = () => {
@@ -14,7 +14,9 @@ const App = () => {
       <Routes>
        <Route path='/' element={<Home/>} />
        <Route path='/about' element={<About/>} />
-       <Route path='/profile' element={<Profile/>} />
+       <Route element={<PrivateRoute />}>
+        <Route path='/profile' element={<Profile/>} />
+       </Route>
        <Route path='/signin' element={<LoginPage/>} />
        <Route path='/signup' element={<SignUp/>} />
       </Routes>
