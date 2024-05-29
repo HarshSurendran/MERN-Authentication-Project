@@ -18,6 +18,7 @@ const LoginForm = () => {
     e.preventDefault();
     try {
         dispatch(signInStart());
+        
         console.log(error);
         const res = await fetch("/api/auth/signin",{
             method:'POST',
@@ -31,10 +32,10 @@ const LoginForm = () => {
           dispatch(signInFailure(data));
           return;
         }
-        console.log("This is the data after signing in",data);
         dispatch(signInSuccess(data))
         navigate('/');
     } catch (error) {
+      console.log("entered catch")
         dispatch(signInFailure(error));
     }
   }
