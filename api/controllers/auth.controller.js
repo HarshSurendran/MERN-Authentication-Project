@@ -79,7 +79,7 @@ export const google = async (req,res,next) => {
             const token = jwt.sign({id: newUser._id},process.env.JWT_SECRET);
             const { password: hashedPassword2, ...rest} = newUser._doc;
             
-            res.cookie('acess_token', token, {
+            res.cookie('access_token', token, {
                 httpOnly: true,
             })
             .status(200)
@@ -89,3 +89,7 @@ export const google = async (req,res,next) => {
         next(error);
     }
 }
+
+export const signout = async (req,res,next) => {
+    res.clearCookie('access_token').status(200).json('Signout success.')
+};
