@@ -1,7 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Header from '../components/Header';
 
-const Home = () => {
+const UserHome = () => {
+  
+  useEffect(()=>{
+    fetch('/api/user/checkuser')
+    .then((res) => res.json())
+    .then((data)=>{      
+      if(!data.status){        
+        dispatch(signOut());
+        navigate("/");
+      }
+    })
+  });
+
   return (
     <div>
       <Header/>
@@ -21,4 +33,4 @@ const Home = () => {
   )
 }
 
-export default Home
+export default UserHome;

@@ -6,9 +6,12 @@ import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/
 import { app } from '../firebase';
 import { useDispatch } from 'react-redux';
 import { updateUserSuccess, updateUserFailure, updateUserStart, deleteUserStart, deleteUserFailure, deleteUserSuccess, signOut } from '../redux/user/userSlice';
+import Swal from "sweetalert2";
+import { useNavigate } from 'react-router-dom';
 
 const Profile = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const fileRef = useRef(null);
   const [image, setImage] = useState(undefined);  
   const [imagePercent , setImagePercent] = useState(0);
@@ -18,14 +21,22 @@ const Profile = () => {
 
   const { currentUser, loading, error } = useSelector((state)=>state.user);
   
-
+  useEffect(()=>{
+    fetch('/api/user/checkuser')
+    .then((res) => res.json())
+    .then((data)=>{      
+      if(!data.status){        
+        dispatch(signOut());
+        navigate("/");
+      }      
+    })
+  });
 
   useEffect(()=>{
     if(image) {
       handleFileUpload(image)
     }
   },[image]);
-
 
   const handleFileUpload = async (image) => {
     const storage = getStorage(app);
@@ -82,20 +93,30 @@ const Profile = () => {
 
   const handleDeleteAccount = async () =>{
     try {
-      dispatch(deleteUserStart());
-      const res = await fetch(`/api/user/delete/${currentUser._id}`, {
-        method: 'DELETE',
-      })
-      const data = await res.json();
-      if(data.success === false){
-        dispatch(deleteUserFailure(data));
-        return;
-      }
-      dispatch(deleteUserSuccess(data));
-
+      Swal.fire({
+        title: "Are you sure?",
+        text: "Are you sure to delete the account. This action cannot be undone.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
+      }).then(async(result) => {
+        if (result.isConfirmed) {
+          dispatch(deleteUserStart());
+          const res = await fetch(`/api/user/delete/${currentUser._id}`, {
+            method: 'DELETE',
+          })
+          const data = await res.json();
+          if(data.success === false){
+            dispatch(deleteUserFailure(data));
+            return;
+          }
+          dispatch(deleteUserSuccess(data));
+        }
+      }); 
     } catch (error) {
       dispatch(deleteUserFailure(error));
-      
     }
   }
 
@@ -107,7 +128,6 @@ const Profile = () => {
       console.log(error);      
     }
   }
-
   
   return (
     <div>
@@ -117,7 +137,7 @@ const Profile = () => {
         <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
           <input type='file' ref={fileRef} hidden accept='image/*' onChange={(e) => setImage(e.target.files[0])}/>
           <img  src={formData.profilePicture || currentUser.profilePicture} alt="profile" className='h-24 w-24 self-center cursor-pointer rounded-full object-cover mt-2' onClick={()=> fileRef.current.click()}/>
-          
+                    
           <p className='text-sm self-center'>
             {imageError ? 
             (<span className='text-red-700'>Error Uploading image (file size must be less than 2 MB)</span>) : 
