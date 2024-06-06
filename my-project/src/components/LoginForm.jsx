@@ -35,7 +35,7 @@ const LoginForm = () => {
         dispatch(signInSuccess(data))
         navigate('/');
     } catch (error) {
-      console.log("entered catch")
+      console.log("entered catch", error);
         dispatch(signInFailure(error));
     }
   }

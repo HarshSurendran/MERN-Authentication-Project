@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 
 function UserTable() {
   const navigate = useNavigate();
+  const [searchTerm, setSearchTerm] = useState("");
   const [users,setUsers] = useState([]);
 
   const getUsers = async() =>{
@@ -57,35 +58,83 @@ function UserTable() {
       }
     });    
   }
+  
+  const filteredUsers = users.filter((val) =>{    
+    return  val.username.toLowerCase().startsWith(searchTerm.toLowerCase())
+  }
+  );
 
 
-
-  return (    
-    users && <Table striped bordered hover variant='dark' >
-      <thead>
-        <tr>
-          <th>#</th>          
-          <th>Username</th>
-          <th>Email</th>          
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        { users.map((user,index)=>{
-          return (
-          <tr key={user._id}>
-            <td>{index+1}</td>
-            <td>{user.username}</td>
-            <td>{user.email}</td>            
-            <td>
-              <FontAwesomeIcon onClick={()=> handleEditUser(user._id)} className='cursor-pointer' icon={faUserPen} /> 
-              <FontAwesomeIcon onClick={()=> handleDeleteUser(user._id)} className='ms-4 cursor-pointer' icon={faTrash} />
-            </td>         
+  return ( 
+    <div>   
+    <input
+      type="search"
+      placeholder="Search by User Name"
+      className="border border-gray-300 px-4 py-2 rounded m-4"
+      value={searchTerm}
+      onChange={(e) => setSearchTerm(e.target.value)}
+    />
+    { searchTerm === "" && users ? 
+      <Table striped bordered hover variant='dark' >
+        <thead>
+          <tr>
+            <th>#</th>    
+            <th>Profile</th>      
+            <th>Username</th>
+            <th>Email</th>          
+            <th>Action</th>
           </tr>
-          )
-        })}
-      </tbody>
-    </Table>
+        </thead>
+        <tbody>
+          { users.map((user,index)=>{
+            return (
+            <tr key={user._id}>
+              <td>{index+1}</td>
+              <td className='flex justify-center' >
+              <img src={user.profilePicture} alt='profile' className=' h-10 w-10 rounded-full object-cover '/>
+              </td>
+              <td>{user.username}</td>
+              <td>{user.email}</td>            
+              <td>
+                <FontAwesomeIcon onClick={()=> handleEditUser(user._id)} className='cursor-pointer' icon={faUserPen} /> 
+                <FontAwesomeIcon onClick={()=> handleDeleteUser(user._id)} className='ms-4 cursor-pointer' icon={faTrash} />
+              </td>         
+            </tr>
+            )
+          })}
+        </tbody>
+      </Table> : 
+      <Table striped bordered hover variant='dark' >
+        <thead>
+          <tr>
+            <th>#</th> 
+            <th>Profile</th>         
+            <th>Username</th>
+            <th>Email</th>          
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          { filteredUsers.map((user,index)=>{
+            return (
+            <tr key={user._id}>
+              <td>{index+1}</td>
+              <td className='flex justify-center' >
+              <img src={user.profilePicture} alt='profile' className=' h-10 w-10 rounded-full object-cover '/>
+              </td>
+              <td>{user.username}</td>
+              <td>{user.email}</td>            
+              <td>
+                <FontAwesomeIcon onClick={()=> handleEditUser(user._id)} className='cursor-pointer' icon={faUserPen} /> 
+                <FontAwesomeIcon onClick={()=> handleDeleteUser(user._id)} className='ms-4 cursor-pointer' icon={faTrash} />
+              </td>         
+            </tr>
+            )
+          })}
+        </tbody>
+      </Table>
+    }
+    </div>
   );
 }
 

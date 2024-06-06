@@ -16,6 +16,7 @@ import UserHome from './Pages/UserHome';
 import PrivateRouteAdmin from './components/PrivateRouteAdmin';
 import EditUser from './Pages/Admin/EditUser';
 import PublicRouteAdmin from './components/PublicRouteAdmin';
+import AddUser from './Pages/Admin/AddUser';
 
 
 
@@ -44,8 +45,9 @@ const App = () => {
         <Route element={<PrivateRouteAdmin />} >
           <Route path='/admin/dashboard' element={<AdminLayout><Dashboard /></AdminLayout>} />
           <Route path="/admin/edit/:id" element={<AdminLayout> <EditUser /></AdminLayout>} />
-          <Route path='/admin/*' element={<AdminLayout><Login /></AdminLayout>} />
+          <Route path='/admin/adduser' element={<AdminLayout> <AddUser/> </AdminLayout>} />
         </Route>
+          {/* <Route path='/admin/*' element={<AdminLayout><Login /></AdminLayout>} /> */}
       </Routes>
     </BrowserRouter>
   )

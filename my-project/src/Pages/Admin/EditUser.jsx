@@ -13,7 +13,7 @@ const EditUser = () => {
   
     const { id } = useParams();
   
-    const naviagte = useNavigate();
+    
     useEffect(() => {
         fetch(`/api/admin/getUser/${id}`)
         .then((res) => res.json())
@@ -60,7 +60,7 @@ const EditUser = () => {
     
     const handleClick = (e) => {
       e.preventDefault();
-      naviagte(`/admin/dashboard`);
+      navigate(`/admin/dashboard`);
     }
 
   return (
